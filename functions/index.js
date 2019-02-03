@@ -46,6 +46,16 @@ var deviceSwagsList = {
     'Alexa': 'https://d33wubrfki0l68.cloudfront.net/5dbb9f50e5dbbf1dd777071d845f049eb005a6ce/33767/assets/swag-img/alexa-cc54409642.webp',
 };
 
+var latestSwagsList = {
+    'Alligator.io': 'https://d33wubrfki0l68.cloudfront.net/a990a98d41f502b3813c6bd209c5a56ec85b71cf/25849/assets/swag-img/alligator_io-1b9eb1984c.webp',
+    'devRant': 'https://d33wubrfki0l68.cloudfront.net/364081ddea9ea65def0e11245ae2fccedc80135a/bc2f7/assets/swag-img/devrant-26d3018fd4.webp',
+    'Google Assistant': 'https://d33wubrfki0l68.cloudfront.net/5b9902f0d1a60bb1c234a4862504a40793001d9d/90b0e/assets/swag-img/google_assistant-e23521d1fe.webp',
+    'Alexa': 'https://d33wubrfki0l68.cloudfront.net/5dbb9f50e5dbbf1dd777071d845f049eb005a6ce/33767/assets/swag-img/alexa-cc54409642.webp',
+    'npm': 'https://d33wubrfki0l68.cloudfront.net/79f863e9a84d3582224d5a0ece0e99a9d2fe5f7e/ea5f1/assets/swag-img/npm-73bff1ec55.webp',
+    'Codeship': 'https://d33wubrfki0l68.cloudfront.net/e0ab1b9cff9b0f776527188f6e8fba9eca44650e/e2448/assets/swag-img/codeship-69a0101a2c.webp',
+    'Gatsby': 'https://d33wubrfki0l68.cloudfront.net/7d6c247e2f77a7459da1540c70e8b3d66da16b1c/e64f8/assets/swag-img/gatsby-906a30759d.webp',
+};
+
 // Create an app instance
 const app = dialogflow()
 
@@ -61,9 +71,9 @@ app.intent('Default Welcome Intent', conv => {
 })
 
 app.intent('latest_swag_opportunity', conv => {
-    conv.ask("Here you are some latest swags")
+    conv.ask("Here are some latest swags")
 
-    if (conv.screen) return conv.ask(latestSwagCarousel());
+    if (conv.screen) return conv.ask(getSwagByTypeCarousel(latestSwagsList, "Swag"));
 
     conv.ask(new Suggestions('Swags to get Stickers', 'Swags to get T-Shirts'));
 })
@@ -96,11 +106,12 @@ app.intent('swag_by_type', (conv, {
         if (swag_type === "sticker") {
             return conv.ask(getSwagByTypeCarousel(stickerSwagsList, "Sticker"))
         } else if (swag_type === "clothing") {
-            return conv.ask(getSwagByTypeCarousel(stickerSwagsList, "T-Shirt"))
+            return conv.ask(getSwagByTypeCarousel(clothingSwagsList, "T-Shirt"))
         } else if (swag_type === "device") {
             return conv.ask(getSwagByTypeCarousel(deviceSwagsList, "Device"))
         } else {
-            return conv.ask("Looks like there are no swags available to get ${swag_type}")
+            conv.ask("Uh Oh! Looks like there are no swags available to get " + swag_type)
+            conv.ask(new Suggestions('Swags to get Stickers', 'Swags to get T-Shirts', 'Swags to get Devices'))
         }
     }
 })
@@ -111,60 +122,6 @@ app.intent('swag_by_company', (conv, {
     conv.ask(swag_language)
 
 })
-
-
-const latestSwagCarousel = () => {
-    const carousel = new Carousel({
-        items: {
-            'Codeship': {
-                title: 'Codeship',
-                image: new Image({
-                    url: 'https://d33wubrfki0l68.cloudfront.net/e0ab1b9cff9b0f776527188f6e8fba9eca44650e/e2448/assets/swag-img/codeship-69a0101a2c.webp',
-                    alt: 'CodeShip Swag images',
-                }),
-            },
-            'Gatsby': {
-                title: 'Gatsby',
-                image: new Image({
-                    url: 'https://d33wubrfki0l68.cloudfront.net/7d6c247e2f77a7459da1540c70e8b3d66da16b1c/e64f8/assets/swag-img/gatsby-906a30759d.webp',
-                    alt: 'Gatsby Tshirt Image',
-                }),
-            },
-            'GoogleAssistant': {
-                title: 'Google Assistant',
-                image: new Image({
-                    url: 'https://d33wubrfki0l68.cloudfront.net/5b9902f0d1a60bb1c234a4862504a40793001d9d/90b0e/assets/swag-img/google_assistant-e23521d1fe.webp',
-                    alt: 'Google Assistant Tshirt Image',
-                }),
-            },
-            'aliigator.io': {
-                title: 'Alligator.io',
-                text: "Write a blog post on frontend development topics, get some cool Alligator stickers!",
-                image: new Image({
-                    url: 'https://d33wubrfki0l68.cloudfront.net/a990a98d41f502b3813c6bd209c5a56ec85b71cf/25849/assets/swag-img/alligator_io-1b9eb1984c.webp',
-                    alt: 'Alligatio.io Logo',
-                }),
-            },
-            'devRant': {
-                title: 'devRant',
-                synonyms: ['pink', 'unicorn'],
-                text: "Get 30 ++'s on a single rant you've posted to devRant to receive 3 free high-quality devRant laptop stickers! Or post an awesome rant that gets over 750 ++'s to receive a free devRant squishy stress ball!",
-                image: new Image({
-                    url: 'https://d33wubrfki0l68.cloudfront.net/364081ddea9ea65def0e11245ae2fccedc80135a/bc2f7/assets/swag-img/devrant-26d3018fd4.webp',
-                    alt: 'Devrant Sticker Image',
-                }),
-            },
-            'Alexa': {
-                title: 'Alexa',
-                image: new Image({
-                    url: 'https://d33wubrfki0l68.cloudfront.net/5dbb9f50e5dbbf1dd777071d845f049eb005a6ce/33767/assets/swag-img/alexa-cc54409642.webp',
-                    alt: 'Alexa Tshirt Image',
-                }),
-            },
-        }
-    });
-    return carousel;
-};
 
 
 const getSwagByTypeCarousel = (itemList, type) => {
