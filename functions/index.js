@@ -117,13 +117,13 @@ const app = dialogflow()
 
 // Register handlers for Dialogflow intents
 
-app.intent('Default Welcome Intent', conv => {
-    conv.ask('Hi, how is it going?')
-    //Todo write a welcome intent
-})
+// app.intent('Default Welcome Intent', conv => {
+//     conv.ask('Hi, how is it going?')
+//     //Todo write a welcome intent
+// })
 
 app.intent('latest_swag_opportunity', conv => {
-    conv.ask("Here are some latest swags")
+    conv.ask("Here are some latest swags. Is there anything else that I can help you with?")
 
     if (conv.screen) {
         conv.ask(getSwagByTypeCarousel(latestSwagsList, "Swag"));
@@ -141,7 +141,7 @@ app.intent('swag_by_language', (conv, {
 app.intent('swag_by_type', (conv, {
     swag_type
 }) => {
-    conv.ask("Here are some swags to get a " + swag_type);
+    conv.ask("Here are some swags to get a " + swag_type + ". Is there anything else that I can help you with?");
     if (conv.screen) {
         if (swag_type === "sticker") {
             return conv.ask(getSwagByTypeCarousel(stickerSwagsList, "Sticker"))
@@ -159,7 +159,7 @@ app.intent('swag_by_type', (conv, {
 app.intent('swag_by_company', (conv, {
     swag_company
 }) => {
-    conv.ask("Here's more info about " + swag_company + " swag.")
+    conv.ask("Here's more info about " + swag_company + " swag.  Is there anything else that I can help you with?")
     conv.ask(new BasicCard({
         text: swagCompanyDescList[swag_company],
         title: swag_company,
